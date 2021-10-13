@@ -1,5 +1,9 @@
 <?php
 
+namespace MailChecker\PhpSdk\Resources;
+
+use function Couchbase\defaultDecoder;
+
 abstract class ApiResource
 {
     public function __construct(array $attributes)
@@ -7,7 +11,7 @@ abstract class ApiResource
         foreach ($attributes as $key => $value) {
             $key = $this->camelCase($key);
 
-            if (property_exists(self::class, $key)) {
+            if (property_exists(static::class, $key)) {
                 $this->{$key} = $value;
             }
         }

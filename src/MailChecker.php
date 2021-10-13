@@ -2,8 +2,8 @@
 
 namespace MailChecker\PhpSdk;
 
-use Carbon\Carbon;
 use GuzzleHttp\Client;
+use MailChecker\PhpSdk\Resources\Email;
 
 class MailChecker
 {
@@ -13,7 +13,7 @@ class MailChecker
 
     public Client $client;
 
-    public function __construct(string $apiToken, string $baseUri = 'https://app.mailchecker.io/api/')
+    public function __construct(string $apiToken, string $baseUri = 'https://app.mailchecker.io/api')
     {
         $this->apiToken = $apiToken;
 
@@ -34,5 +34,14 @@ class MailChecker
         $this->client = $client;
 
         return $this;
+    }
+
+    public function validateEmail(string $email): Email
+    {
+        $result = $this->get("validate", [
+            'email' => $email,
+        ]);
+
+        return new Email($result);
     }
 }

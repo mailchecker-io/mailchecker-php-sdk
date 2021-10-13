@@ -3,37 +3,22 @@
 namespace MailChecker\PhpSdk;
 
 use Exception;
-use MailChecker\PhpSdk\Exceptions\EmailValidationException;
+use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 
 trait MakesHttpRequests
 {
-    protected function get(string $uri)
+    protected function get(string $uri, $queryParams = [])
     {
-        return $this->request('GET', $uri);
+        return $this->request('GET', $uri, $queryParams);
     }
 
-    protected function post(string $uri, array $payload = [])
-    {
-        return $this->request('POST', $uri, $payload);
-    }
-
-    protected function put(string $uri, array $payload = [])
-    {
-        return $this->request('PUT', $uri, $payload);
-    }
-
-    protected function delete(string $uri, array $payload = [])
-    {
-        return $this->request('DELETE', $uri, $payload);
-    }
-
-    protected function request(string $verb, string $uri, array $payload = [])
+    protected function request(string $verb, string $uri, array $queryParams = [])
     {
         $response = $this->client->request(
             $verb,
             $uri,
-            empty($payload) ? [] : ['form_params' => $payload]
+            empty($queryParams) ? [] : [RequestOptions::QUERY => $queryParams]
         );
 
         if (! $this->isSuccessful($response)) {
@@ -56,18 +41,6 @@ trait MakesHttpRequests
 
     protected function handleRequestError(ResponseInterface $response): void
     {
-        if ($response->getStatusCode() === 422) {
-            throw new EmailValidationException();
-        }
-
-        if ($response->getStatusCode() === 404) {
-            throw new NotFoundException();
-        }
-
-        if ($response->getStatusCode() === 400) {
-            throw new FailedActionException((string) $response->getBody());
-        }
-
         throw new Exception((string) $response->getBody());
     }
 }

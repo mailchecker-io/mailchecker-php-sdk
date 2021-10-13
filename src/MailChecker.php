@@ -29,22 +29,10 @@ class MailChecker
         ]);
     }
 
-    public function convertDateFormat(string $date, $format = 'YmdHis'): string
-    {
-        return Carbon::parse($date)->format($format);
-    }
-
     public function setClient(Client $client): self
     {
         $this->client = $client;
 
         return $this;
-    }
-
-    protected function transformCollection(array $collection, string $class): array
-    {
-        return array_map(function($attributes) use ($class) {
-            return new $class($attributes, $this);
-        }, $collection);
     }
 }

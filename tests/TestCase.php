@@ -3,7 +3,7 @@
 namespace MailChecker\PhpSdk\Tests;
 
 use Dotenv\Dotenv;
-use GuzzleHttp\Client;
+use MailChecker\PhpSdk\MailChecker;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -16,7 +16,10 @@ abstract class TestCase extends BaseTestCase
 
         $this->loadEnvironmentVariables();
 
-        $this->mailChecker = new MailChecker();
+        $apiToken = getenv('API_TOKEN');
+        $baseUri  = getenv('MAIL_CHECKER_API_URL');
+
+        $this->mailChecker = new MailChecker($apiToken, $baseUri);
     }
 
     protected function loadEnvironmentVariables()

@@ -38,9 +38,7 @@ class MailChecker
 
     public function validateEmail(string $email): Email
     {
-        $result = $this->get("validate", [
-            'email' => $email,
-        ]);
+        $result = $this->get("validate/{$email}");
 
         return new Email($result);
     }

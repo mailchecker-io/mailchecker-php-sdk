@@ -19,10 +19,6 @@ trait MakesHttpRequests
             $uri
         );
 
-        if (!$this->isSuccessful($response)) {
-            return $this->handleRequestError($response);
-        }
-
         $responseBody = (string)$response->getBody();
 
         return json_decode($responseBody, true) ?: $responseBody;
@@ -35,10 +31,5 @@ trait MakesHttpRequests
         }
 
         return (int)substr($response->getStatusCode(), 0, 1) === 2;
-    }
-
-    protected function handleRequestError(ResponseInterface $response): void
-    {
-        throw new Exception((string)$response->getBody());
     }
 }

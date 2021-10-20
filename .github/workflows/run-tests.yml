@@ -1,6 +1,6 @@
 name: run-tests
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
     test:
@@ -8,9 +8,9 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [ubuntu-latest]
-                php: [8.0, 7.4]
-                dependency-version: [prefer-lowest, prefer-stable]
+                os: [ ubuntu-latest ]
+                php: [ 8.0, 7.4 ]
+                dependency-version: [ prefer-lowest, prefer-stable ]
 
         name: P${{ matrix.php }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
@@ -23,11 +23,11 @@ jobs:
                 with:
                     php-version: ${{ matrix.php }}
 
-            -   name: Copy .env.example file
-                run: cp .env.example .env
-
             -   name: Install dependencies
                 run: composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
             -   name: Run tests
+                env:
+                    API_TOKEN: ${{secret.API_TOKEN}}
+                    MAIL_CHECKER_API_URL: ${{secret.MAIL_CHECKER_API_URL}}
                 run: vendor/bin/phpunit

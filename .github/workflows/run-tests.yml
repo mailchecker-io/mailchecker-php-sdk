@@ -28,6 +28,6 @@ jobs:
 
             -   name: Run tests
                 env:
-                    API_TOKEN: ${{secret.API_TOKEN}}
-                    MAIL_CHECKER_API_URL: ${{secret.MAIL_CHECKER_API_URL}}
+                    API_TOKEN: ${{ secrets.API_TOKEN }}
+                    MAIL_CHECKER_API_URL: ${{ secrets.MAIL_CHECKER_API_URL }}
                 run: vendor/bin/phpunit
